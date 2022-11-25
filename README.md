@@ -2,6 +2,8 @@
 
 Pulls random questions from a database and posts them using Discord webhooks.
 
+![Example screenshot](example.png)
+
 ## Misc info
 Requires `DBI` and `WebService::Discord::Webhook` from the CPAN. Find the `$url` var and change it to have your webhook URL. Run periodically using a cron script or similar. Has been tested on Fedora 36 & 37 as well as Rocky Linux 9.
 
