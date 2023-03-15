@@ -14,7 +14,7 @@ my $date = "@month_name[$mon] $mday, $year";
 
 # Create the webhook object and DBI object
 my $webhook = WebService::Discord::Webhook->new( $url );
-my $dbh = DBI->connect("dbi:SQLite:questions.sqlite", { AutoCommit => 1, sqlite_unicode => 1 });
+my $dbh = DBI->connect("dbi:SQLite:questions.sqlite", '', '', { AutoCommit => 1, sqlite_unicode => 1 });
 
 # Fetch ID of unsent questions from DB and pass to @questions array. If no questions are left then instead send an error to Discord and close DB connection
 my @questions = @{ $dbh->selectcol_arrayref("SELECT id FROM data WHERE used = 0") };
