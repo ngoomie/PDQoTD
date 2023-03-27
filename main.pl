@@ -19,7 +19,7 @@ my $dbh = DBI->connect("dbi:SQLite:questions.sqlite", '', '', { AutoCommit => 1,
 # Fetch ID of unsent questions from DB and pass to @questions array. If no questions are left then instead send an error to Discord and close DB connection
 my @questions = @{ $dbh->selectcol_arrayref("SELECT id FROM data WHERE used = 0") };
 if (@questions == 0) {
-    $webhook->execute( content => 'There are no more questions left to post — please add more or you will get this message again tomorrow!');$dbh->disconnect; die}
+    $webhook->execute( content => 'There are no more questions left to post — please add more or you will get this message again tomorrow!');$dbh->disconnect; die "No available unused questions, stopped"}
 else {
 # Pick one fetched ID at random and pass to $q_id
     my $q_id = $questions[rand @questions];
@@ -42,5 +42,5 @@ else {
 
     if ($#questions == 0) {
         $webhook->execute( content => '**You\'re out of questions!** Please add more or no question will be posted tomorrow.');
-        $dbh->disconnect; die
-    } else { $dbh->disconnect; die }}
+        $dbh->disconnect; warn "Last available question used, finished"
+    } else { $dbh->disconnect; exit }}
