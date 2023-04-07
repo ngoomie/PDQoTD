@@ -7,6 +7,9 @@ use DBI;
 
 # Config
 my $url = 'paste webhook URL here';
+my $rolePing = 0; # 0 = don't ping at all, 1 = ping role ID specified in $roleID, 2 = everyone
+my $roleID = 0;
+
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my @month_name = qw(January February March April May June July August September October November December);
 $year += 1900;
@@ -39,6 +42,13 @@ else {
         'footer' => { 'text' =>  'Submitted by ' . $source_text . '  •  ' . $#questions . $remains },
         'color' => rand 16777215
     });
+
+    if ($rolePing > 0) {
+        if ($rolePing == 1) {
+            $webhook->execute( content => '<@&' . $roleID . '>' );
+        } elsif ($rolePing == 2) {
+            $webhook->execute( content => '@everyone' );
+        }};
 
     if ($#questions == 0) {
         $webhook->execute( content => '**You\'re out of questions!** Please add more or no question will be posted tomorrow.');
